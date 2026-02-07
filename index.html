@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>My Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #020617;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1f2937;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 22px;
+            color: #38bdf8;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #cbd5f5;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #38bdf8;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* Hero section */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-text h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .hero-text h3 {
+            font-size: 18px;
+            color: #9ca3af;
+            margin-bottom: 15px;
+        }
+
+        .hero-text p {
+            max-width: 480px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #38bdf8;
+            color: #020617;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #0ea5e9;
+        }
+
+        .hero-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 3px solid #38bdf8;
+            background: #020617;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-align: center;
+            padding: 15px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .hero-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        section h2 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            border-left: 4px solid #38bdf8;
+            padding-left: 10px;
+        }
+
+        /* Skills */
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            border: 1px solid #38bdf8;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+        }
+
+        /* Projects */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .project-card {
+            background: #020617;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+        }
+
+        .project-card h3 {
+            margin-bottom: 6px;
+            color: #e5e7eb;
+        }
+
+        .project-card p {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        .project-link {
+            font-size: 13px;
+            text-decoration: none;
+            color: #38bdf8;
+        }
+
+        /* Contact form */
+        form {
+            max-width: 450px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 13px;
+            padding: 15px 0 25px;
+            color: #6b7280;
+            border-top: 1px solid #1f2937;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 10px 15px;
+            }
+            .hero-text h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+
+    <script>
+        // Simple JS: show alert when contact form is submitted
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert("Thank you for contacting me! I will reply soon.");
+            event.target.reset();
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Rounak | Web & AIML Student</h1>
+    <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Hello, I'm Rounak 👋</h2>
+            <h3>Aspiring AIML Engineer & Web Developer</h3>
+            <p>
+                I’m currently pursuing B.Tech in AIML and learning how to build smart
+                applications using code, data, and machine learning. I love building
+                projects that solve real problems.
+            </p>
+            <a href="#projects" class="btn">View My Projects</a>
+        </div>
+        <div class="hero-photo" style="background-color: #000000;">
+           <img src="image/rounak.jpeg" alt="Rounak Das Image">
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <h2>About Me</h2>
+        <p>
+            I am a passionate engineering student focusing on Artificial Intelligence,
+            Machine Learning, and Web Development. My goal is to work at top tech
+            companies like Google or Microsoft and build impactful solutions using AI.
+        </p>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-list">
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">C Programming</span>
+            <span class="skill-tag">Python (Basics)</span>
+            <span class="skill-tag">Machine Learning (Basics)</span>
+            <span class="skill-tag">Git & GitHub</span>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Student Study Planner</h3>
+                <p>
+                    A simple web app to plan daily study tasks and track progress.
+                    Built using HTML, CSS, and JavaScript.
+                </p>
+                <a href="#" class="project-link">View Code (GitHub coming soon)</a>
+            </div>
+            <div class="project-card">
+                <h3>Portfolio Website</h3>
+                <p>
+                    This website itself is a project showing my profile, skills,
+                    projects, and a contact form.
+                </p>
+                <a href="#" class="project-link">You are viewing it now 🎉</a>
+            </div>
+            <div class="project-card">
+                <h3>Basic ML Notebook</h3>
+                <p>
+                    Experimented with a small dataset using Python to understand
+                    how machine learning models work.
+                </p>
+                <a href="#" class="project-link">Will upload soon</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <p style="margin-bottom:10px;">
+            Want to collaborate or have any questions? Send me a message 👇
+        </p>
+        <form onsubmit="handleSubmit(event)">
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="Enter your name" required />
+
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="Enter your email" required />
+
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Write your message..." required></textarea>
+
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </section>
+</div>
+
+<footer>
+    © 2025 Rounak • Built with pure HTML, CSS & JS
+</footer>
+
+</body>
+</html>
