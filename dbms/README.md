@@ -95,6 +95,17 @@ for f in sql/0[1-9]*.sql sql/1[01]*.sql; do mysql -u root -p railflow_db < "$f" 
 mysql -u root -p --force railflow_db < sql/12_test_cases.sql
 ```
 
+On Windows PowerShell, from this project directory, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\setup.ps1
+```
+
+The script locates the MySQL 8.0 client, prompts for the root password without
+storing it, runs all scripts in order, executes the expected-failure tests, and
+removes only the test rows afterward.
+
 ### File-by-file purpose
 
 | File | Purpose |
