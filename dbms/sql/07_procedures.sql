@@ -68,6 +68,10 @@ proc_body: BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Inactive users cannot create new bookings.';
     END IF;
 
+    IF p_coach_type NOT IN ('SL', '3A', '2A', '1A', 'CC', 'EC') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid coach class.';
+    END IF;
+
     SELECT status INTO v_train_status FROM trains WHERE train_id = p_train_id;
     IF v_train_status IS NULL THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid train: train does not exist.';
@@ -251,6 +255,7 @@ CREATE PROCEDURE sp_process_payment (
 )
 proc_body: BEGIN
     DECLARE v_booking_status VARCHAR(15);
+    DECLARE v_payment_status VARCHAR(15);
     DECLARE v_total_fare DECIMAL(10,2);
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -259,7 +264,8 @@ proc_body: BEGIN
         RESIGNAL;
     END;
 
-    SELECT booking_status, total_fare INTO v_booking_status, v_total_fare
+    SELECT booking_status, payment_status, total_fare
+      INTO v_booking_status, v_payment_status, v_total_fare
       FROM bookings WHERE booking_id = p_booking_id;
 
     IF v_booking_status IS NULL THEN
@@ -267,6 +273,9 @@ proc_body: BEGIN
     END IF;
     IF v_booking_status = 'CANCELLED' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Payment failed: booking has already been cancelled.';
+    END IF;
+    IF v_payment_status IN ('SUCCESS', 'REFUNDED') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Payment already completed for this booking.';
     END IF;
     IF p_amount <> v_total_fare THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Payment amount does not match the booking total fare.';
@@ -449,6 +458,7 @@ CREATE PROCEDURE sp_cancel_booking (
 )
 proc_body: BEGIN
     DECLARE v_booking_id BIGINT UNSIGNED;
+    DECLARE v_booking_user_id BIGINT UNSIGNED;
     DECLARE v_booking_status VARCHAR(15);
     DECLARE v_payment_status VARCHAR(15);
     DECLARE v_departure_dt DATETIME;
@@ -459,6 +469,8 @@ proc_body: BEGIN
     DECLARE v_charge DECIMAL(10,2);
     DECLARE v_schedule_id BIGINT UNSIGNED;
     DECLARE v_coach_type VARCHAR(3);
+    DECLARE v_cancel_user_role VARCHAR(15);
+    DECLARE v_cancel_user_status VARCHAR(15);
 
     DECLARE v_done INT DEFAULT 0;
     DECLARE v_alloc_id BIGINT UNSIGNED;
@@ -481,8 +493,9 @@ proc_body: BEGIN
         RESIGNAL;
     END;
 
-    SELECT booking_id, booking_status, payment_status, schedule_id, coach_type, total_fare
-      INTO v_booking_id, v_booking_status, v_payment_status, v_schedule_id, v_coach_type, v_total_fare
+    SELECT booking_id, user_id, booking_status, payment_status, schedule_id, coach_type, total_fare
+      INTO v_booking_id, v_booking_user_id, v_booking_status, v_payment_status,
+           v_schedule_id, v_coach_type, v_total_fare
       FROM bookings
      WHERE pnr = p_pnr;
 
@@ -491,6 +504,18 @@ proc_body: BEGIN
     END IF;
     IF v_booking_status = 'CANCELLED' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Booking has already been cancelled.';
+    END IF;
+
+    SELECT role, account_status
+      INTO v_cancel_user_role, v_cancel_user_status
+      FROM users
+     WHERE user_id = p_cancelled_by;
+    IF v_cancel_user_status IS NULL OR v_cancel_user_status <> 'ACTIVE' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cancellation user does not exist or is inactive.';
+    END IF;
+    IF p_cancelled_by <> v_booking_user_id
+       AND v_cancel_user_role NOT IN ('ADMIN', 'STAFF') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only the booking owner or an administrator can cancel this booking.';
     END IF;
 
     SELECT departure_datetime INTO v_departure_dt

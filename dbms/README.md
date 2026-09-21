@@ -195,10 +195,12 @@ an inactive train, a booking through an inactive station, a direct insert of
 an allocation onto an inactive seat, a direct duplicate active-seat
 allocation, a negative fare, a duplicate PNR, cancelling an already-cancelled
 booking, a negative refund, an inactive user attempting to book, a duplicate
-passenger within one booking, a future date of birth, and reverting a
-cancelled booking's status. **Every one of the 20 fails**, verified by
-actually running the file with `mysql --force` and inspecting each error
-against its expected `ERROR`/`SIGNAL` message.
+passenger within one booking, a future date of birth, and reverting a cancelled booking's status. **Every one
+of the 20 fails**, verified by actually running the file with
+`mysql --force` and inspecting each error against its expected `ERROR`/`SIGNAL`
+message. The payment procedure also rejects repeated successful/refunded
+payments, and cancellation is restricted to the booking owner or an
+administrator/staff user.
 
 Run with `--force` so MySQL continues past the *expected* errors instead of
 aborting the script at the first one.
